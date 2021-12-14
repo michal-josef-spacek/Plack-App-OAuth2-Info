@@ -1,0 +1,8 @@
+CONCEPT
+=======
+Application which uses:
+- $env
+- $session
+- 'oauth2' object in sesssion
+
+And print information from oauth2.
