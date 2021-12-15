@@ -22,7 +22,13 @@ no_index:
     - t
     - xt
 requires:
+  Data::Printer: 0
+  Error::Pure: 0
+  JSON: 0
   Plack::Component::Tags::HTML: 0
+  Plack::Request: 0
+  Plack::Session: 0
+  Unicode::UTF8: 0
   perl: 5.8.0
 resources:
   bugtracker: https://github.com/michal-josef-spacek/Plack-App-OAuth2-Info/issues
