@@ -20,6 +20,7 @@ readme_from 'Info.pm';
 recursive_author_tests('xt');
 requires 'Data::Printer' => 0;
 requires 'Error::Pure' => 0;
+requires 'JSON' => 0;
 requires 'Plack::Component::Tags::HTML' => 0;
 requires 'Plack::Request' => 0;
 requires 'Plack::Session' => 0;
