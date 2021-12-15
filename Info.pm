@@ -174,15 +174,6 @@ sub _tags_middle {
 			);
 		}
 		$self->{'tags'}->put(
-			['b', 'dt'],
-			['d', 'Google plus'],
-			['e', 'dt'],
-			['b', 'dd'],
-			['b', 'a'],
-			['a', 'href', $self->{'oauth2'}->{'profile'}->{'link'}],
-			['d', 'Google plus'],
-			['e', 'a'],
-			['e', 'dd'],
 			['e', 'dl'],
 		);
 	} else {
