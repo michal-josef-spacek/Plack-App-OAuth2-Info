@@ -17,7 +17,7 @@ sub provider_info {
 	my ($session, $oauth2_hr) = @_;
 
 	my $service_provider = $session->get('oauth2.service_provider');
-	if ($service_provider eq 'google') {
+	if ($service_provider eq 'Google') {
 		return _google($session, $oauth2_hr);
 	} else {
 		err "Service provider '$service_provider' doesn't supported.";
