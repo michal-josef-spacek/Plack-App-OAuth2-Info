@@ -10,6 +10,7 @@ use JSON;
 use Plack::Request;
 use Plack::Session;
 use Unicode::UTF8 qw(decode_utf8 encode_utf8);
+use Plack::App::OAuth2::Info::Utils qw(provider_info);
 
 our $VERSION = 0.01;
 
@@ -44,28 +45,23 @@ sub _process_actions {
 	};
 	my $token_string = $session->get('token_string');
 	if (defined $token_string) {
-		my $res = $oauth2->get('https://www.googleapis.com/userinfo/v2/me');
-		if ($res->is_success) {
-			my $json = JSON->new;
-			$self->{'oauth2'}->{'profile'} = $json->decode($res->decoded_content);
+		provider_info($session, $self->{'oauth2'});
 
-			my $token_string_dump = $session->get('token_string_dump')
-				|| 0;
-			if ($token_string_dump) {
-				my $token_string_out;
-				p $token_string, 'output' => \$token_string_out;
-				$self->{'oauth2'}->{'token_string'}->{'string'}
-					= $token_string_out;
-				$self->{'oauth2'}->{'token_string'}->{'expires_in'}
-					= $oauth2->access_token->expires_in;
-				$self->{'oauth2'}->{'token_string'}->{'can_refresh_tokens'}
-					= $oauth2->can_refresh_tokens;
-			}
-			$self->{'oauth2'}->{'login'} = 1;
-		} else {
-			$self->{'oauth2'}->{'login'} = 0;
-			$self->{'oauth2'}->{'error'} = $res->status_line;
-		}
+#		# TODO Fix parameter.
+#		if ($self->{'oauth2'}->{'login'}) {
+#			my $token_string_dump = $session->get('token_string_dump')
+#				|| 0;
+#			if ($token_string_dump) {
+#				my $token_string_out;
+#				p $token_string, 'output' => \$token_string_out;
+#				$self->{'oauth2'}->{'token_string'}->{'string'}
+#					= $token_string_out;
+#				$self->{'oauth2'}->{'token_string'}->{'expires_in'}
+#					= $oauth2->access_token->expires_in;
+#				$self->{'oauth2'}->{'token_string'}->{'can_refresh_tokens'}
+#					= $oauth2->can_refresh_tokens;
+#			}
+#		}
 	} else {
 		$self->{'oauth2'}->{'login'} = 0;
 		$self->{'oauth2'}->{'error'} = "Token string doesn't defined.";
