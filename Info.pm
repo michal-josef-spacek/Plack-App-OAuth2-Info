@@ -6,7 +6,6 @@ use warnings;
 
 use Data::Printer;
 use Error::Pure qw(err);
-use JSON;
 use Plack::Request;
 use Plack::Session;
 use Unicode::UTF8 qw(decode_utf8 encode_utf8);
