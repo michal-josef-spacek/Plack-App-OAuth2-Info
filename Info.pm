@@ -6,10 +6,10 @@ use warnings;
 
 use Data::Printer;
 use Error::Pure qw(err);
+use Plack::App::OAuth2::Info::Utils qw(provider_info);
 use Plack::Request;
 use Plack::Session;
 use Unicode::UTF8 qw(decode_utf8 encode_utf8);
-use Plack::App::OAuth2::Info::Utils qw(provider_info);
 
 our $VERSION = 0.01;
 
