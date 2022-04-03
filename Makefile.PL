@@ -24,6 +24,7 @@ requires 'JSON' => 0;
 requires 'Plack::Component::Tags::HTML' => 0;
 requires 'Plack::Request' => 0;
 requires 'Plack::Session' => 0;
+requires 'Tags::HTML::OAuth2::Info' => 0;
 requires 'Unicode::UTF8' => 0;
 resources 'bugtracker' => 'https://github.com/michal-josef-spacek/Plack-App-OAuth2-Info/issues';
 resources 'homepage' => 'https://github.com/michal-josef-spacek/Plack-App-OAuth2-Info';

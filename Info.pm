@@ -9,6 +9,7 @@ use Error::Pure qw(err);
 use Plack::App::OAuth2::Info::Utils qw(provider_info);
 use Plack::Request;
 use Plack::Session;
+use Tags::HTML::OAuth2::Info;
 use Unicode::UTF8 qw(decode_utf8 encode_utf8);
 
 our $VERSION = 0.01;
@@ -26,6 +27,16 @@ sub _check_required_middleware {
 	if (! $session->get('oauth2')) {
 		err 'No Plack::Middleware::Auth::OAuth2 present.';
 	}
+
+	return;
+}
+
+sub _prepare_app {
+	my $self = shift;
+
+	$self->{'_tags_html_oauth2_info'} = Tags::HTML::OAuth2::Info->new(
+		'tags' => $self->tags,
+	);
 
 	return;
 }
@@ -75,118 +86,7 @@ sub _process_actions {
 sub _tags_middle {
 	my $self = shift;
 
-	$self->{'tags'}->put(
-		['b', 'html'],
-		['b', 'body'],
-		['b', 'div'],
-		['a', 'class', 'head'],
-		['d', 'ID: '.$self->{'oauth2'}->{'id'}],
-		['b', 'a'],
-		['a', 'style', 'float:right;'],
-	);
-	if ($self->{'oauth2'}->{'login'}) {
-		$self->{'tags'}->put(
-			['a', 'href', '/logout'],
-			['d', 'Logout'],
-		);
-	} else {
-		$self->{'tags'}->put(
-			['a', 'href', $self->{'oauth2'}->{'authorization_url'}],
-			['d', 'Login'],
-		);
-	}
-	$self->{'tags'}->put(
-		['e', 'a'],
-		['b', 'hr'],
-		['a', 'style', 'clear:both;'],
-		['e', 'hr'],
-		['e', 'div'],
-
-		['b', 'div'],
-		['a', 'class', 'content'],
-	);
-	if ($self->{'oauth2'}->{'login'}) {
-		$self->{'tags'}->put(
-			['b', 'div'],
-			['a', 'style', 'border: 1px solid black;'],
-		);
-		if (exists $self->{'oauth2'}->{'token_string'}
-			&& exists $self->{'oauth2'}->{'token_string'}->{'string'}) {
-
-			$self->{'tags'}->put(
-				['b', 'a'],
-				['a', 'href', '/token_string_dump?view=0'],
-				['d', decode_utf8('Vypnout zobrazení dumpu')],
-				['e', 'a'],
-
-				['b', 'pre'],
-				['d', $self->{'oauth2'}->{'token_string'}->{'string'}],
-				['e', 'pre'],
-
-				['b', 'dl'],
-				['b', 'dt'],
-				['d', 'Token string expired'],
-				['e', 'dt'],
-				['b', 'dd'],
-				['d', $self->{'oauth2'}->{'token_string'}->{'expires_in'}],
-				['e', 'dd'],
-
-				['b', 'dt'],
-				['d', 'Can refresh token string'],
-				['e', 'dt'],
-				['b', 'dd'],
-				['d', $self->{'oauth2'}->{'token_string'}->{'can_refresh_tokens'}],
-				['e', 'dd'],
-				['e', 'dl'],
-			);
-		} else {
-			$self->{'tags'}->put(
-				['b', 'a'],
-				['a', 'href', '/token_string_dump?view=1'],
-				['d', 'Zobrazit dump'],
-				['e', 'a'],
-			);	
-		}
-		$self->{'tags'}->put(
-			['e', 'div'],
-
-			['b', 'img'],
-			['a', 'src', $self->{'oauth2'}->{'profile'}->{'picture'}],
-			['a', 'style', 'float:right;'],
-			['e', 'img'],
-
-			['b', 'dl'],
-			['a', 'style', 'clear:left;'],
-		);
-		foreach my $item ('name', 'given_name', 'family_name', 'email', 'gender', 'locale', 'id') {
-			$self->{'tags'}->put(
-				['b', 'dt'],
-				['d', $item],
-				['e', 'dt'],
-				['b', 'dd'],
-				['d', $self->{'oauth2'}->{'profile'}->{$item} ? decode_utf8($self->{'oauth2'}->{'profile'}->{$item}) : ''],
-				['e', 'dd'],
-			);
-		}
-		$self->{'tags'}->put(
-			['e', 'dl'],
-		);
-	} else {
-		$self->{'tags'}->put(
-			['d', decode_utf8('Obsah není přístupný.')],
-			$self->{'oauth2'}->{'error'} ? (
-				['b', 'p'],
-				['a', 'style', 'color:red'],
-				['d', $self->{'oauth2'}->{'error'}],
-				['e', 'p'],
-			) : (),
-		);
-	}
-	$self->{'tags'}->put(
-		['e', 'div'],
-		['e', 'body'],
-		['e', 'html'],
-	);
+	$self->{'_tags_html_oauth2_info'}->process($self->{'oauth2'});
 
 	return;
 }
