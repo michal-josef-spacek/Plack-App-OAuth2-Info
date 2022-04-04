@@ -33,7 +33,7 @@ sub _google {
 	if ($res->is_success) {
 		my $json = JSON->new;
 		$oauth2_hr->{'profile'} = $json->decode($res->decoded_content);
-		$oauth2_hr->{'login'} = 0;
+		$oauth2_hr->{'login'} = 1;
 	} else {
 		$oauth2_hr->{'error'} = $res->status_line;
 		$oauth2_hr->{'login'} = 0;
