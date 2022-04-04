@@ -27,7 +27,7 @@ sub provider_info {
 sub _google {
 	my ($session, $oauth2_hr) = @_;
 
-	my $oauth2 = $session->get('oauth2');
+	my $oauth2 = $session->get('oauth2.obj');
 
 	my $res = $oauth2->get('https://www.googleapis.com/userinfo/v2/me');
 	if ($res->is_success) {

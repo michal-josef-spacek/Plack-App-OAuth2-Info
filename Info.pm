@@ -24,7 +24,7 @@ sub _check_required_middleware {
 
 	# Check use of Plack::Middleware::Auth::OAuth2 before this app.
 	my $session = Plack::Session->new($env);
-	if (! $session->get('oauth2')) {
+	if (! $session->get('oauth2.obj')) {
 		err 'No Plack::Middleware::Auth::OAuth2 present.';
 	}
 
@@ -49,11 +49,11 @@ sub _process_actions {
 	my $req = Plack::Request->new($env);
 	my $session = Plack::Session->new($env);
 
-	my $oauth2 = $session->get('oauth2');
+	my $oauth2 = $session->get('oauth2.obj');
 	$self->{'oauth2'} = {
 		id => $session->id,
 	};
-	my $token_string = $session->get('token_string');
+	my $token_string = $session->get('oauth2.token_string');
 	if (defined $token_string) {
 		provider_info($session, $self->{'oauth2'});
 
