@@ -57,21 +57,20 @@ sub _process_actions {
 	if (defined $token_string) {
 		provider_info($session, $self->{'oauth2'});
 
-#		# TODO Fix parameter.
-#		if ($self->{'oauth2'}->{'login'}) {
-#			my $token_string_dump = $session->get('token_string_dump')
-#				|| 0;
-#			if ($token_string_dump) {
-#				my $token_string_out;
-#				p $token_string, 'output' => \$token_string_out;
-#				$self->{'oauth2'}->{'token_string'}->{'string'}
-#					= $token_string_out;
-#				$self->{'oauth2'}->{'token_string'}->{'expires_in'}
-#					= $oauth2->access_token->expires_in;
-#				$self->{'oauth2'}->{'token_string'}->{'can_refresh_tokens'}
-#					= $oauth2->can_refresh_tokens;
-#			}
-#		}
+		if ($self->{'oauth2'}->{'login'}) {
+			my $token_string_dump = $session->get('oauth2.token_string_dump')
+				|| 0;
+			if ($token_string_dump) {
+				my $token_string_out;
+				p $token_string, 'output' => \$token_string_out;
+				$self->{'oauth2'}->{'token_string'}->{'string'}
+					= $token_string_out;
+				$self->{'oauth2'}->{'token_string'}->{'expires_in'}
+					= $oauth2->access_token->expires_in;
+				$self->{'oauth2'}->{'token_string'}->{'can_refresh_tokens'}
+					= $oauth2->can_refresh_tokens;
+			}
+		}
 	} else {
 		$self->{'oauth2'}->{'login'} = 0;
 		$self->{'oauth2'}->{'error'} = "Token string doesn't defined.";
