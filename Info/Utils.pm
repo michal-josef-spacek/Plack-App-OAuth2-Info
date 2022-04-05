@@ -37,10 +37,26 @@ sub _google {
 	} else {
 		$oauth2_hr->{'error'} = $res->status_line;
 		$oauth2_hr->{'login'} = 0;
-		
 	}
 
 	return;
+}
+
+sub _wikimedia {
+	my ($session, $oauth2_hr) = @_;
+
+	my $oauth2 = $session->get('oauth2.obj');
+	my $res = $oauth2->get('https://meta.wikimedia.org/w/rest.php/oauth2/resource/profile');
+	if ($res->is_success) {
+		my $json = JSON->new;
+		$oauth2_hr->{'profile'} = $json->decode($res->decoded_content);
+		$oauth2_hr->{'login'} = 1;
+	} else {
+		$oauth2_hr->{'error'} = $res->status_line;
+		$oauth2_hr->{'login'} = 0;
+	}
+
+	# TODO scopes https://meta.wikimedia.org/w/rest.php/oauth2/resource/scopes
 }
 
 1;
