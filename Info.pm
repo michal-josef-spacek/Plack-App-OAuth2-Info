@@ -79,6 +79,13 @@ sub _process_actions {
 		$self->{'oauth2'}->{'authorization_url'} = $oauth2->authorization_url;
 	}
 
+	if ($ENV{'DEBUG'}) {
+		require Plack::App::Data::Printer;
+		$self->psgi_app(
+			Plack::App::Data::Printer->new('data' => $self->{'oauth2'})->to_app->($env),
+		);
+	}
+
 	return;
 }
 
