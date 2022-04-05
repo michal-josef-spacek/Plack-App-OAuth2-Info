@@ -19,6 +19,8 @@ sub provider_info {
 	my $service_provider = $session->get('oauth2.service_provider');
 	if ($service_provider eq 'Google') {
 		return _google($session, $oauth2_hr);
+	} elsif ($service_provider eq 'Wikimedia') {
+		return _wikimedia($session, $oauth2_hr);
 	} else {
 		err "Service provider '$service_provider' doesn't supported.";
 	}
