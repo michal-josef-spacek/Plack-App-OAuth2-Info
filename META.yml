@@ -28,6 +28,7 @@ requires:
   Plack::Component::Tags::HTML: 0
   Plack::Request: 0
   Plack::Session: 0
+  Tags::HTML::OAuth2::Info: 0
   Unicode::UTF8: 0
   perl: 5.8.0
 resources:
