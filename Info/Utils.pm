@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Error::Pure qw(err);
-use JSON;
+use JSON::XS;
 use Readonly;
 
 # Constants.
@@ -33,8 +33,7 @@ sub _google {
 
 	my $res = $oauth2->get('https://www.googleapis.com/userinfo/v2/me');
 	if ($res->is_success) {
-		my $json = JSON->new;
-		$oauth2_hr->{'profile'} = $json->decode($res->decoded_content);
+		$oauth2_hr->{'profile'} = _json()->decode($res->decoded_content);
 		$oauth2_hr->{'login'} = 1;
 	} else {
 		$oauth2_hr->{'error'} = $res->status_line;
@@ -44,14 +43,19 @@ sub _google {
 	return;
 }
 
+sub _json {
+	my $json = JSON::XS->new;
+	$json->boolean_values(0, 1);
+	return $json->utf8->allow_nonref;
+}
+
 sub _wikimedia {
 	my ($session, $oauth2_hr) = @_;
 
 	my $oauth2 = $session->get('oauth2.obj');
 	my $res = $oauth2->get('https://meta.wikimedia.org/w/rest.php/oauth2/resource/profile');
 	if ($res->is_success) {
-		my $json = JSON->new;
-		$oauth2_hr->{'profile'} = $json->decode($res->decoded_content);
+		$oauth2_hr->{'profile'} = _json()->decode($res->decoded_content);
 		$oauth2_hr->{'login'} = 1;
 	} else {
 		$oauth2_hr->{'error'} = $res->status_line;

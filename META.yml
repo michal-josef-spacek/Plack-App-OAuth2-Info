@@ -24,7 +24,7 @@ no_index:
 requires:
   Data::Printer: 0
   Error::Pure: 0
-  JSON: 0
+  JSON::XS: 0
   Plack::Component::Tags::HTML: 0
   Plack::Request: 0
   Plack::Session: 0
